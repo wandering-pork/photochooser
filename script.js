@@ -110,6 +110,10 @@ let usedIndicesB = [];
 let currentPhotoA = null;
 let currentPhotoB = null;
 
+// Gallery mode state
+let likedPhotos = new Set();
+let currentMode = 'challenge'; // 'challenge' or 'gallery'
+
 // DOM elements
 const imgLeft = document.getElementById('img-left');
 const imgRight = document.getElementById('img-right');
@@ -119,6 +123,16 @@ const currentRoundEl = document.getElementById('current-round');
 const gameScreen = document.getElementById('game-screen');
 const resultsScreen = document.getElementById('results-screen');
 const restartBtn = document.getElementById('restart-btn');
+
+// Gallery mode DOM elements
+const galleryScreen = document.getElementById('gallery-screen');
+const galleryGrid = document.getElementById('gallery-grid');
+const galleryDoneBtn = document.getElementById('gallery-done-btn');
+const galleryResultsScreen = document.getElementById('gallery-results-screen');
+const galleryRestartBtn = document.getElementById('gallery-restart-btn');
+const challengeModeBtn = document.getElementById('challenge-mode-btn');
+const galleryModeBtn = document.getElementById('gallery-mode-btn');
+const roundCounter = document.getElementById('round-counter');
 
 // Utility functions
 function getRandomUnusedIndex(array, usedIndices) {
@@ -220,6 +234,129 @@ photoRight.addEventListener('click', () => {
 });
 
 restartBtn.addEventListener('click', resetGame);
+
+// Gallery mode functions
+function initGallery() {
+    galleryGrid.innerHTML = '';
+    likedPhotos.clear();
+
+    // Get 40 random photos from each account
+    const selectedA = [...ACCOUNT_A_PHOTOS]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 40)
+        .map(photo => ({ src: photo, account: 'A' }));
+
+    const selectedB = [...ACCOUNT_B_PHOTOS]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 40)
+        .map(photo => ({ src: photo, account: 'B' }));
+
+    // Combine 40 from each source
+    const allPhotos = [...selectedA, ...selectedB];
+
+    // Shuffle combined photos for variety
+    const shuffled = allPhotos.sort(() => Math.random() - 0.5);
+
+    // Create gallery tiles
+    shuffled.forEach((photo, index) => {
+        const tile = document.createElement('div');
+        tile.className = 'gallery-tile';
+        tile.dataset.src = photo.src;
+        tile.dataset.account = photo.account;
+
+        const img = document.createElement('img');
+        img.src = photo.src;
+        img.alt = `Photo ${index + 1}`;
+
+        const likeIcon = document.createElement('div');
+        likeIcon.className = 'like-icon';
+        likeIcon.innerHTML = '♥';
+
+        tile.appendChild(img);
+        tile.appendChild(likeIcon);
+
+        tile.addEventListener('click', () => toggleLike(tile));
+
+        galleryGrid.appendChild(tile);
+    });
+}
+
+function toggleLike(tile) {
+    const photoSrc = tile.dataset.src;
+
+    if (likedPhotos.has(photoSrc)) {
+        likedPhotos.delete(photoSrc);
+        tile.classList.remove('liked');
+    } else {
+        likedPhotos.add(photoSrc);
+        tile.classList.add('liked');
+    }
+}
+
+function showGalleryResults() {
+    let likedA = 0;
+    let likedB = 0;
+
+    likedPhotos.forEach(photoSrc => {
+        if (ACCOUNT_A_PHOTOS.includes(photoSrc)) {
+            likedA++;
+        } else if (ACCOUNT_B_PHOTOS.includes(photoSrc)) {
+            likedB++;
+        }
+    });
+
+    const total = likedPhotos.size;
+    const percentageA = total > 0 ? Math.round((likedA / total) * 100) : 0;
+    const percentageB = total > 0 ? Math.round((likedB / total) * 100) : 0;
+
+    document.getElementById('gallery-score-a').textContent = likedA;
+    document.getElementById('gallery-score-b').textContent = likedB;
+    document.getElementById('gallery-percentage-a').textContent = `${percentageA}%`;
+    document.getElementById('gallery-percentage-b').textContent = `${percentageB}%`;
+
+    galleryScreen.classList.add('hidden');
+    galleryResultsScreen.classList.remove('hidden');
+}
+
+function resetGallery() {
+    galleryResultsScreen.classList.add('hidden');
+    galleryScreen.classList.remove('hidden');
+    initGallery();
+}
+
+function switchToChallenge() {
+    currentMode = 'challenge';
+    galleryScreen.classList.add('hidden');
+    galleryResultsScreen.classList.add('hidden');
+    resultsScreen.classList.add('hidden');
+    gameScreen.classList.remove('hidden');
+    roundCounter.classList.remove('hidden');
+
+    challengeModeBtn.classList.add('active');
+    galleryModeBtn.classList.remove('active');
+
+    resetGame();
+}
+
+function switchToGallery() {
+    currentMode = 'gallery';
+    gameScreen.classList.add('hidden');
+    resultsScreen.classList.add('hidden');
+    galleryResultsScreen.classList.add('hidden');
+    galleryScreen.classList.remove('hidden');
+    roundCounter.classList.add('hidden');
+
+    galleryModeBtn.classList.add('active');
+    challengeModeBtn.classList.remove('active');
+
+    initGallery();
+}
+
+// Gallery event listeners
+galleryDoneBtn.addEventListener('click', showGalleryResults);
+galleryRestartBtn.addEventListener('click', resetGallery);
+challengeModeBtn.addEventListener('click', switchToChallenge);
+galleryModeBtn.addEventListener('click', switchToGallery);
 
 // Initialize game
 loadNewRound();

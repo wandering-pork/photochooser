@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Photo Preference Challenge</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -10,7 +13,11 @@
     <div class="container">
         <header>
             <h1>Photo Preference Challenge</h1>
-            <div class="round-counter">
+            <div class="mode-switcher">
+                <button id="challenge-mode-btn" class="mode-btn active">Challenge Mode</button>
+                <button id="gallery-mode-btn" class="mode-btn">Gallery Mode</button>
+            </div>
+            <div class="round-counter" id="round-counter">
                 Round <span id="current-round">1</span> / 20
             </div>
         </header>
@@ -43,6 +50,33 @@
                 </div>
             </div>
             <button id="restart-btn" class="restart-btn">Play Again</button>
+        </div>
+
+        <div id="gallery-screen" class="gallery-screen hidden">
+            <div class="gallery-header">
+                <h2>Select Your Favorites</h2>
+                <button id="gallery-done-btn" class="done-btn">Done</button>
+            </div>
+            <div class="gallery-grid" id="gallery-grid">
+                <!-- Photos will be dynamically loaded here -->
+            </div>
+        </div>
+
+        <div id="gallery-results-screen" class="results-screen hidden">
+            <h2>Gallery Results</h2>
+            <div class="results-content">
+                <div class="score-item">
+                    <h3>Heartlands</h3>
+                    <div class="score" id="gallery-score-a">0</div>
+                    <div class="percentage" id="gallery-percentage-a">0%</div>
+                </div>
+                <div class="score-item">
+                    <h3>Storytellers</h3>
+                    <div class="score" id="gallery-score-b">0</div>
+                    <div class="percentage" id="gallery-percentage-b">0%</div>
+                </div>
+            </div>
+            <button id="gallery-restart-btn" class="restart-btn">Browse Again</button>
         </div>
     </div>
 
