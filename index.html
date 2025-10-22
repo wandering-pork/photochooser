@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Preference Challenge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Photo Preference Challenge</h1>
+            <div class="round-counter">
+                Round <span id="current-round">1</span> / 20
+            </div>
+        </header>
+
+        <div id="game-screen" class="game-screen">
+            <div class="photos-container">
+                <div class="photo-wrapper" id="photo-left">
+                    <img src="" alt="Photo 1" id="img-left">
+                    <div class="photo-overlay">Click to Choose</div>
+                </div>
+                <div class="photo-wrapper" id="photo-right">
+                    <img src="" alt="Photo 2" id="img-right">
+                    <div class="photo-overlay">Click to Choose</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-screen" class="results-screen hidden">
+            <h2>Results</h2>
+            <div class="results-content">
+                <div class="score-item">
+                    <h3>Heartlands</h3>
+                    <div class="score" id="score-a">0</div>
+                    <div class="percentage" id="percentage-a">0%</div>
+                </div>
+                <div class="score-item">
+                    <h3>Storytellers</h3>
+                    <div class="score" id="score-b">0</div>
+                    <div class="percentage" id="percentage-b">0%</div>
+                </div>
+            </div>
+            <button id="restart-btn" class="restart-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram URL Extractor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .method {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .method h2 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        .step {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        .step::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        code {
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .success {
+            background: #d1f2eb;
+            color: #0c5c4c;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+        }
+        .note {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .badge {
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Instagram URL Extractor</h1>
+        <p class="subtitle">Extract post URLs and image URLs from any Instagram profile</p>
+
+        <!-- METHOD 1 -->
+        <div class="method">
+            <h2>Method 1: Browser Console <span class="badge">EASIEST</span></h2>
+
+            <div class="step">Open Instagram profile: <code>https://www.instagram.com/heartlands.studio/</code></div>
+            <div class="step">Scroll down to load about 40 photos</div>
+            <div class="step">Press <code>F12</code> to open Developer Tools</div>
+            <div class="step">Click the <strong>Console</strong> tab</div>
+            <div class="step">Paste the code below and press <code>Enter</code></div>
+
+            <div class="code-block" id="consoleCode">// Extract Post URLs
+const postLinks = Array.from(document.querySelectorAll('a[href*="/p/"]'))
+    .map(a => a.href)
+    .filter(href => href.includes('/p/'))
+    .filter((v, i, a) => a.indexOf(v) === i);
+
+// Extract Image URLs
+const imageUrls = Array.from(document.querySelectorAll('img[src*="cdninstagram"]'))
+    .map(img => img.src)
+    .filter(src => src.includes('cdninstagram'))
+    .filter((v, i, a) => a.indexOf(v) === i);
+
+console.log('=== POST URLS ===');
+console.log(postLinks.join('\n'));
+console.log('\n=== IMAGE URLS ===');
+console.log(imageUrls.join('\n'));
+
+// Copy to clipboard
+const output = '// Post URLs:\n' + postLinks.join('\n') + '\n\n// Image URLs:\n' + imageUrls.join('\n');
+copy(output);
+alert(`✓ Extracted ${postLinks.length} posts and ${imageUrls.length} images!\nURLs copied to clipboard!`);</div>
+
+            <button onclick="copyCode('consoleCode')">📋 Copy Code</button>
+
+            <div class="success" style="margin-top: 15px;">
+                ✓ This will automatically copy all URLs to your clipboard!
+            </div>
+        </div>
+
+        <!-- METHOD 2 -->
+        <div class="method">
+            <h2>Method 2: Generate JavaScript Array <span class="badge">DIRECT</span></h2>
+
+            <div class="step">Use Method 1 to get image URLs</div>
+            <div class="step">Or paste the code below in the console for a ready-to-use array:</div>
+
+            <div class="code-block" id="jsArrayCode">// Extract and format as JavaScript array
+const imageUrls = Array.from(document.querySelectorAll('img[src*="cdninstagram"]'))
+    .map(img => img.src)
+    .filter(src => src.includes('cdninstagram'))
+    .filter((v, i, a) => a.indexOf(v) === i);
+
+const jsArray = 'const ACCOUNT_A_PHOTOS = [\n' +
+    imageUrls.map(url => `    '${url}',`).join('\n') +
+    '\n];';
+
+console.log(jsArray);
+copy(jsArray);
+alert(`✓ Generated JavaScript array with ${imageUrls.length} images!\nCode copied - paste directly into script.js!`);</div>
+
+            <button onclick="copyCode('jsArrayCode')">📋 Copy Code</button>
+
+            <div class="success" style="margin-top: 15px;">
+                ✓ This creates a ready-to-paste JavaScript array for your web app!
+            </div>
+        </div>
+
+        <!-- METHOD 3 -->
+        <div class="method">
+            <h2>Method 3: Python Script</h2>
+
+            <div class="step">Run the Python script I created: <code>python extract_post_urls.py</code></div>
+            <div class="step">It will extract post URLs and image URLs automatically</div>
+            <div class="step">May not work due to Instagram's API restrictions</div>
+
+            <div class="note">
+                <strong>Note:</strong> If you get a 403 error, use Method 1 or 2 instead.
+            </div>
+        </div>
+
+        <!-- INSTRUCTIONS -->
+        <div class="method" style="border-left-color: #28a745;">
+            <h2 style="color: #28a745;">📝 After Extracting URLs</h2>
+
+            <div class="step">Open <code>script.js</code> in a text editor</div>
+            <div class="step">Find the line: <code>const ACCOUNT_A_PHOTOS = [</code></div>
+            <div class="step">Replace the entire array with your extracted URLs</div>
+            <div class="step">Repeat for the second Instagram account (ACCOUNT_B_PHOTOS)</div>
+            <div class="step">Open <code>index.html</code> in your browser</div>
+            <div class="step">Enjoy your photo comparison app!</div>
+        </div>
+
+        <div class="note">
+            <strong>⚠️ Important:</strong> Instagram CDN URLs may have CORS restrictions. If images don't load in your web app, you'll need to download the images locally and use the <code>generate_urls_from_folder.py</code> script instead.
+        </div>
+    </div>
+
+    <script>
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✓ Code copied to clipboard!\n\nNow paste it in your browser console on Instagram.');
+            }).catch(err => {
+                alert('Could not copy: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>

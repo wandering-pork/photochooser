@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Image Extractor - Bookmarklet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .bookmarklet {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+            cursor: move;
+        }
+        .bookmarklet:hover {
+            opacity: 0.9;
+        }
+        .instructions {
+            background: #f0f0f0;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+        }
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .note {
+            color: #666;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Instagram Image URL Extractor</h1>
+
+        <p>This bookmarklet helps you extract image URLs from Instagram while you browse.</p>
+
+        <div class="instructions">
+            <h3>How to Install:</h3>
+            <ol>
+                <li>Drag the button below to your browser's bookmarks bar</li>
+                <li>If you don't see a bookmarks bar, press <code>Ctrl+Shift+B</code> (Windows) or <code>Cmd+Shift+B</code> (Mac)</li>
+            </ol>
+        </div>
+
+        <a href="javascript:(function(){const imgs=document.querySelectorAll('img[src*=&quot;cdninstagram&quot;],img[src*=&quot;fbcdn&quot;]');const urls=Array.from(imgs).map(img=>img.src).filter(src=>src.includes('cdninstagram')||src.includes('fbcdn'));const uniqueUrls=[...new Set(urls)];if(uniqueUrls.length===0){alert('No Instagram images found on this page!');return;}const popup=window.open('','Image URLs','width=600,height=400');popup.document.write('<html><head><title>Image URLs</title><style>body{font-family:Arial;padding:20px;}textarea{width:100%;height:300px;font-family:monospace;font-size:12px;}</style></head><body>');popup.document.write('<h2>Found '+uniqueUrls.length+' image URLs</h2>');popup.document.write('<p>Copy these URLs:</p>');popup.document.write('<textarea>'+uniqueUrls.join('\n')+'</textarea>');popup.document.write('<button onclick=&quot;navigator.clipboard.writeText(document.querySelector(\'textarea\').value).then(()=>alert(\'Copied to clipboard!\'))&quot;>Copy All</button>');popup.document.write('</body></html>');popup.document.close();})();" class="bookmarklet">📷 Extract Instagram URLs</a>
+
+        <div class="instructions">
+            <h3>How to Use:</h3>
+            <ol>
+                <li>Go to an Instagram profile (e.g., https://www.instagram.com/heartlands.studio/)</li>
+                <li>Scroll down to load the photos you want</li>
+                <li>Click the bookmarklet in your bookmarks bar</li>
+                <li>A popup will show all image URLs found on the page</li>
+                <li>Click "Copy All" to copy them to clipboard</li>
+                <li>Paste into a text file or directly into script.js</li>
+            </ol>
+        </div>
+
+        <p class="note"><strong>Note:</strong> This extracts URLs from images already loaded on the page. Scroll down the Instagram profile first to load more photos before clicking the bookmarklet.</p>
+
+        <div class="instructions">
+            <h3>Alternative: Manual Download (Most Reliable)</h3>
+            <ol>
+                <li>Install browser extension: <a href="https://chrome.google.com/webstore/search/instagram%20downloader" target="_blank">Instagram Downloader</a></li>
+                <li>Or use website: <a href="https://downloadgram.com" target="_blank">DownloadGram.com</a></li>
+                <li>Download images one by one</li>
+                <li>Save to folders: <code>images/account_a/</code> and <code>images/account_b/</code></li>
+                <li>Run <code>python generate_urls_from_folder.py</code></li>
+            </ol>
+        </div>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+
+        <h3>Quick DevTools Method</h3>
+        <p>If the bookmarklet doesn't work:</p>
+        <div class="instructions">
+            <ol>
+                <li>Open Instagram profile</li>
+                <li>Press <code>F12</code> to open DevTools</li>
+                <li>Click <strong>Console</strong> tab</li>
+                <li>Paste this code and press Enter:</li>
+            </ol>
+        </div>
+
+        <textarea id="consoleCode" readonly style="width: 100%; height: 120px; font-family: monospace; padding: 10px; margin: 10px 0;">const imgs = document.querySelectorAll('img[src*="cdninstagram"],img[src*="fbcdn"]');
+const urls = Array.from(imgs).map(img => img.src).filter(src => src.includes('cdninstagram') || src.includes('fbcdn'));
+const uniqueUrls = [...new Set(urls)];
+console.log(uniqueUrls.join('\n'));
+copy(uniqueUrls.join('\n'));</textarea>
+
+        <button onclick="navigator.clipboard.writeText(document.getElementById('consoleCode').value).then(() => alert('Code copied! Paste it in the browser console.'))">Copy Console Code</button>
+
+        <p class="note" style="margin-top: 10px;">This will copy all URLs to your clipboard automatically!</p>
+    </div>
+</body>
+</html>

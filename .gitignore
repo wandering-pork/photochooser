@@ -1,0 +1,29 @@
+# Photo folders (too large for GitHub)
+photos_heartlands.studio/
+photos_storytellers.studio/
+images/
+downloaded_images/
+
+# Temporary files
+temp_urls.txt
+urls.txt
+*.txt
+photo_arrays.js
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.instagram.com)",
+      "Bash(python generate_urls_from_folder.py)",
+      "Bash(git init)",
+      "Bash(git remote add origin https://github.com/wandering-pork/photochooser.git)",
+      "Bash(git add .)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
